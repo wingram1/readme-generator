@@ -15,21 +15,21 @@
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
   return `
-  # ${data.title}
+# ${data.title}
 
-  // data.license
+## ${data.description}
 
-  ## ${data.description}
+## ${data.install}
 
-  ## ${data.install}
+## ${data.usage}
 
-  ## ${data.usage}
-
-  ## ${data.contributions}
+## ${data.contributions}
 
 `;
 }
 
 
 
-module.exports = generateMarkdown;
+
+
+module.exports = {generateMarkdown};
