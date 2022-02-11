@@ -59,7 +59,6 @@ const questions = [
 function writeToFile(fileName, data) {
     return new Promise((resolve, reject) => {
         fs.writeFile(fileName, data, err => {
-            console.log("Line 61 data: " + data)
             // if error, reject
             if (err) {
                 reject(err);

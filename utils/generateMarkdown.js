@@ -1,40 +1,35 @@
 // TODO: Create a function that returns a license badge based on which license is passed in
 // If there is no license, return an empty string
-function renderLicenseBadge(license) {
+function createPromise(license) {
 
-    const licensePromise = new Promise ((resolve, reject) => {
-    if (license != 'None') {
-      resolve({
-        ok: true,
-        message: 'License found!',
-        foundLicense: license
-      }
-    )} else {
-      reject({
-        ok: false,
-        message: 'No license found!',
-        foundLicense: ''
-      })
-    } 
-  })
+  return new Promise (resolve => {
+    setTimeout(() => {
+      resolve(license);
+    }, 2000);
+  }); 
+}
+
+async function renderLicenseBadge(dataLicense) {
     
+    
+
     // pass license into renderLicenseLink
-    licensePromise.then(promiseObj => {
-      console.log("renderLicenseLink log: " + JSON.stringify(promiseObj.foundLicense))
-      return renderLicenseLink(promiseObj.foundLicense)
-    }) 
+    await createPromise(dataLicense)
+      .then(dataLicense => {
+        console.log("Promise Obj: " + JSON.stringify(dataLicense.foundLicense))
+        return renderLicenseLink(dataLicense.foundLicense)
+      }) 
     // pass license into renderLicenseSection
       .then(licenseLink => {
-      console.log("renderLicenseSection: " + licenseLink);
-      return renderLicenseSection(licenseLink)
-    })
-    //   .then(licenseSection => {
-    //   console.log("Final section markup: " + licenseSection);
-    //   return licenseSection;
-    // })
-      // .catch(err => {
-      //   console.log(err);
-      // })
+        console.log("licenseLink: " + licenseLink);
+        return renderLicenseSection(licenseLink)
+      })
+        .then(licenseSection => {
+        return renderLicenseSection(licenseSection);
+      })
+      .catch(err => {
+        console.log(err);
+      })
 }
 
 // TODO: Create a function that returns the license link
@@ -55,20 +50,23 @@ function renderLicenseLink(license) {
 // TODO: Create a function that returns the license section of README
 // If there is no license, return an empty string
 function renderLicenseSection(licenseLink) {
+  console.log("Final section markup: " + licenseLink);
   return licenseLink;
 }
 
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
 
-return `
+  var licenseBadge = JSON.stringify(renderLicenseBadge(data.license));
+
+  var output = `
 # ${data.title}
 
 <!--- expected outcome -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <!--- current outcome -->
-${renderLicenseBadge(data.license)}
+${licenseBadge}
 
 ## ${data.description}
 
@@ -80,7 +78,11 @@ ${renderLicenseBadge(data.license)}
 
 ## ${data.contributions}
 
-`;
+`
+
+console.log("output log check");
+//return
+return output;
 }
 
 module.exports = {generateMarkdown};
