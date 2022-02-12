@@ -55,35 +55,30 @@ function renderLicenseSection(license) {
   }
 }
 
-var renderSection = function(section) {
-
-}
-
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
 
-  var header = `
-${renderLicenseBadge(data.license)}
-# ${title}
+  if (data.install) {
+    installSection = `## Install
+    ${data.install}`
+  }
 
-## Description
-${data.description}
+
+
 `
+## Table of Contents
 
+## ${data.install}
 
-// `
-// // ## Table of Contents
+## ${data.usage}
 
-// // ## ${data.install}
+## ${data.contributions}
 
-// // ## ${data.usage}
+## License
+${data.license}
 
-// // ## ${data.contributions}
-
-// // ## License
-// // ${data.license}
-
-// `
+## Contact Me
+`
 }
 
 module.exports = {generateMarkdown};
