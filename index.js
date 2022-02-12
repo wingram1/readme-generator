@@ -3,12 +3,13 @@ const inquirer = require('inquirer');
 const fs = require('fs');
 const {generateMarkdown} = require('./utils/generateMarkdown.js')
 
+
 // TODO: Create an array of questions for user input
 const questions = [
     {
         type: 'input',
         name: 'title',
-        message: 'Enter the title of your project: ',
+        message: 'Enter the title of your project (Required!): ',
         validate: input => {
             if (input) {
             return true;
@@ -23,37 +24,61 @@ const questions = [
         name: 'description',
         message: 'Enter a description of your project (Required!): ',
         validate: input => {
-        if (input) {
-            return true;
-        } else {
-            console.log("Please enter a title!");
-            return false;
-        }
+            if (input) {
+                return true;
+            } else {
+                console.log("Please enter a title!");
+                return false;
+            }
         }
     },
     {
         type: 'input',
         name: 'install',
-        message: 'Enter installation instructions: '
+        message: 'Enter installation instructions: ',
     },
     {
         type: 'input',
         name: 'usage',
-        message: 'Enter instructions for examples of use: '
+        message: 'Enter text for an examples of use section: ',
     },
     {
         type: 'input',
         name: 'contributions',
-        message: 'Enter any contributions (collaborators, use of third-party software, followed any tutorials, etc.): '
+        message: 'Enter text for a  contributions section (collaborators, use of third-party software, tutorials used, etc.): ',
     },
     {
         type: 'list',
         name: 'license',
-        message: 'What license would you like to add?',
+        message: 'Which license type best fits your project?',
         choices: ['MIT', 'APACHE 2.0', 'GPL 3.0', 'BSD 3', 'None']
+    },
+    //github username for a contact section
+    {
+        type: 'input',
+        name: 'github',
+        message: 'Enter your GitHub username:'
+    },
+    // email for a contact section
+    {
+        type: 'input',
+        name: 'email',
+        message: 'Enter your email address:'
     }
 ];
 
+const licenseQuestions = [
+    {
+        type: 'input',
+        name: 'name',
+        message: 'Enter your full name to be displayed in the license section'
+    },
+    {
+        type: 'input',
+        name: 'year',
+        message: 'Enter the year to be displayed in the license section'
+    }
+]
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
@@ -76,11 +101,27 @@ function writeToFile(fileName, data) {
 
 // TODO: Create a function to initialize app
 function init() {
-    return inquirer.prompt(questions);
+    return inquirer.prompt(questions)
+}
+
+// Function to prompt additional information for license
+const licensePrompt = existingData => {
+    existingData.licenseData = [];
+
+    if (existingData.license != 'None') {
+        return inquirer.prompt(licenseQuestions)
+            .then(licenseData => {
+                existingData.licenseData.push(licenseData);
+                return existingData;
+            })
+    } else {
+        return existingData;
+    }
 }
 
 // Function call to initialize app
 init()
+    .then(licensePrompt)
     .then(data => {
         console.log(data);
         return generateMarkdown(data);
