@@ -57,13 +57,29 @@ const questions = [
     {
         type: 'input',
         name: 'github',
-        message: 'Enter your GitHub username:'
+        message: 'Enter your GitHub username:',
+        validate: input => {
+            if (input) {
+                return true;
+            } else {
+                console.log("Please enter a title!");
+                return false;
+            }
+        }
     },
     // email for a contact section
     {
         type: 'input',
         name: 'email',
-        message: 'Enter your email address:'
+        message: 'Enter your email address:',
+        validate: input => {
+            if (input) {
+                return true;
+            } else {
+                console.log("Please enter a title!");
+                return false;
+            }
+        }
     }
 ];
 
@@ -111,6 +127,7 @@ const licensePrompt = existingData => {
     if (existingData.license != 'None') {
         return inquirer.prompt(licenseQuestions)
             .then(licenseData => {
+                console.log(existingData +"=============="+ licenseData)
                 existingData.licenseData.push(licenseData);
                 return existingData;
             })
