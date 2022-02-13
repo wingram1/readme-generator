@@ -145,6 +145,7 @@ init()
     })
     .then(writeFileResponse => {
         console.log(writeFileResponse);
+        console.log("File successfully generated! Check the 'dist' folder.")
         return writeToFile('./dist/README.md', writeFileResponse);
     })
     .catch(err => {
